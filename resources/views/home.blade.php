@@ -1,23 +1,37 @@
-@extends('layouts.app')
+@extends('layouts.master')
+@include('layouts.nave')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+  <section class="container mt-4">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-6 col-md-6">
+                <form class="form-container">
+                    <h2 class="text-center bg-dark p-2 text-white">Add Task Listing</h2>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Enter Title">
+                    </div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" name="description" id="description" placeholder="Enter Description"></textarea>
+                    </div>
 
-                    {{ __('You are logged in!') }}
-                </div>
+                    <button type="submit" class="btn btn-dark btn-block save_btn">Submit</button>
+                </form>
             </div>
         </div>
-    </div>
-</div>
+      </div>
+  </section>
 @endsection
+
+
+@push('javascript')
+<script>
+
+ 
+</script>
+@endpush
+
+
