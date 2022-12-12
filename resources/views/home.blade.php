@@ -30,7 +30,75 @@
 @push('javascript')
 <script>
 
- 
+$(document).ready(function() {
+  
+   
+        $('.save_btn').on('click', function(e) {
+          
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            
+            let title = $('#title').val();
+            let description = $('#description').val();
+            const form = $(this).parents('form');
+            $(form).validate({
+                
+                rules: {
+                    title: {
+                        required: true
+                    }
+                },
+                message: {
+                    title: "Title is required"
+                },
+
+                submitHandler: function() {
+                let formData = new FormData(form[0]);
+
+                $.ajax({
+                        type: 'POST',
+                        url: 'save_task',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success:function(data) {
+
+                            if(data.status) {
+                                $('#notifDiv').fadeIn();
+                                $('#notifDiv').css('background', 'green');
+                                $('#notifDiv').text(data.message);
+                                setTimeout(() => {
+                                    $('#notifDiv').fadeOut();
+                                }, 3000);
+                                $('[name="title"]').val('');
+                                $('textarea[name="description"]').val('');
+                            } else {
+                                $('#notifDiv').fadeIn();
+                                $('#notifDiv').css('background', 'red');
+                                $('#notifDiv').text('Something went wrong');
+                                setTimeout(() => {
+                                    $('#notifDiv').fadeOut();
+                                }, 3000);
+                            }
+                        },
+                      
+                            
+                       
+                        error:function(err) {
+                            console.log(err);
+                        }
+                    });
+
+
+                }
+
+            });
+            
+        });
+    });
 </script>
 @endpush
 

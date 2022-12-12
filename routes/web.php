@@ -23,6 +23,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::post('/save_task', [App\Http\Controllers\TaskController::class, 'store'])->name('save_task');
+
+
 Route::get('/send',function (){
     Mail::to('hossamibrahim66666@gmail.com')->send(new \App\Mail\test());
 
