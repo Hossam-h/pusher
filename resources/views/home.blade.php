@@ -18,7 +18,7 @@
                         <textarea class="form-control" name="description" id="description" placeholder="Enter Description"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-dark btn-block save_btn">Submit</button>
+                    <button  class="btn btn-dark btn-block save_btn">Submit</button>
                 </form>
             </div>
         </div>
@@ -32,6 +32,21 @@
 
 $(document).ready(function() {
   
+    var pusher = new Pusher('3ab81de2700d1de128b7', {
+        cluster: 'eu'
+        });
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+            if(data.from) {
+                let pending = parseInt($('#' + data.from).find('.pending').html());
+                if(pending) {
+                    $('#' + data.from).find('.pending').html(pending + 1);
+                } else {
+                    $('#' + data.from).html('<a href="#" class="nav-link" data-toggle="dropdown"><i  class="fa fa-bell text-white"><span class="badge badge-danger pending">1</span></i></a>');
+                }
+            }
+        });
+
    
         $('.save_btn').on('click', function(e) {
           

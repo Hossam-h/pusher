@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Models\Message;     
+use Pusher\Pusher;
+use Auth;
 
 class TaskController extends Controller
 {
@@ -36,15 +38,36 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        Task::create([
-            'name'=>$request->title,
+      $task =  Task::create([
+             'name'=>$request->title,
             'description'=>$request->description,
 
         ]);
 
         Message::create([
             'message'=>$request->title,
+            'user_id'=>Auth::user()->id
         ]);
+
+        
+        $options = array(
+            'cluster' => 'eu',
+            'useTLS' => true
+        );
+
+
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
+
+
+        $data = ['from' => Auth::user()->id];
+        
+        $pusher->trigger('my-channel', 'my-event', $data);
+
 
         return response()->json([
             'status'=>true, 'message'=>'task added sucess'
