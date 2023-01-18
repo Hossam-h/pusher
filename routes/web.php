@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\StripePaymentController;
 
 
 /*
@@ -24,6 +25,19 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/save_task', [App\Http\Controllers\TaskController::class, 'store'])->name('save_task');
+
+Route::get('/paywithpaypal', [App\Http\Controllers\PaypalController::class,'payWithPaypal'])->name('paywithpaypal');
+Route::post('/paypal', [App\Http\Controllers\PaypalController::class,'postPaymentWithpaypal'])->name('paypal');
+Route::get('/paypal', [App\Http\Controllers\PaypalController::class,'getPaymentStatus'])->name('status');
+
+
+
+
+
+Route::get('/stripe', [App\Http\Controllers\StripePaymentController::class,'stripe'])->name('stripe');
+Route::post('/stripe', [App\Http\Controllers\StripePaymentController::class,'stripePost'])->name('stripe.post');
+
+
 
 
 Route::get('/send',function (){
