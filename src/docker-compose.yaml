@@ -1,0 +1,91 @@
+version: "3"
+
+networks:
+  laravel:
+ 
+ 
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: "${NGNIX_CONTRAINER_NAME}"
+    ports:
+      - "${NGNIX_PORT}:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+    depends_on:
+      - php
+      - mysql
+    networks:
+       laravel:
+        aliases:
+          - api.local
+      
+
+  mysql:
+    image: mysql:8.0
+    container_name: "${MYSQL_CONTRAINER_NAME}"
+    tty: true
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    networks:
+      - laravel
+  php:
+    build: .
+    container_name: "${PHP_CONTRAINER_NAME}"
+    ports:
+      - "${PHP_PORT}:9000"
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - laravel
+
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: "${PHPMYADMIN_CONTRAINER_NAME}"
+    depends_on:
+      - mysql
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    environment:
+      PMA_HOST: "${PMA_HOST}"
+      UPLOAD_LIMIT: "${UPLOAD_LIMIT}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    networks:
+      - laravel
+    
+  composer:
+    image: composer:latest
+    container_name: "${COMPOSER_NAME}" 
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - php
+    user: root
+    entrypoint: ['composer', '--ignore-platform-reqs']
+    networks:
+      - laravel 
+   
+  npm:
+    image: node:13.7
+    container_name: "${NPM_NAME}"
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - 3000:3000
+      - 3001:3001
+    working_dir: /var/www/html
+    entrypoint: ['npm']
+    networks:
+      - laravel 

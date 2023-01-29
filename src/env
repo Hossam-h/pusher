@@ -1,0 +1,28 @@
+#ports
+NGNIX_PORT= 8080
+MYSQL_PORT= 4307
+PHP_PORT= 9000
+PHPMYADMIN_PORT= 8081
+
+#container names
+
+NGNIX_CONTRAINER_NAME= nginx_nourish_dashboard
+MYSQL_CONTRAINER_NAME= mysql_nourish_dashboard
+PHP_CONTRAINER_NAME= php_nourish_dashboard
+PHPMYADMIN_CONTRAINER_NAME= phpmyadmin_nourish_dashboard
+COMPOSER_NAME= composer_nourish_dashboard
+ARTISAN_NAME=artisan_nourish_dashboard
+NPM_NAME=npm_nourish_dashboard
+
+# mysql envs
+
+MYSQL_DATABASE= nourish_dashboard
+MYSQL_USER= nourish_dashboard
+MYSQL_PASSWORD= nourish_dashboard
+MYSQL_ROOT_PASSWORD= nourish_dashboard
+
+
+#phpmyadmin envs
+
+PMA_HOST= mysql
+UPLOAD_LIMIT= 60G
